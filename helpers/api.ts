@@ -26,7 +26,7 @@ export const callInternalAPI = async (
   jwt?: string,
   body?: any
 ) => {
-  const res = await fetch(`${window.location.origin}${url}`, {
+  const res = await fetch(`${url}`, {
     method: method ?? "GET",
     headers: !!jwt
       ? {

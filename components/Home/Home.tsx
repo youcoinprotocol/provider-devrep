@@ -6,38 +6,33 @@ import { mobile } from "@/constants/constants";
 import { useSearchParams } from "next/navigation";
 import { Airdropping } from "../Airdropping/Airdropping";
 import { getGitHubAccessToken, redirectToGithub } from "@/app/api/github.api";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { redirect, useRouter } from "next/navigation";
 import { signIn, getSession } from "next-auth/react";
 
-export const Home: React.FC = () => {
+export const Home: React.FC = (x) => {
   const isMobile = useMediaQuery(mobile);
   const router = useRouter();
-  
-  useEffect(() => {
-    getSession().then(r => {
-      console.log(r)
-    })
-  })
-
-  const params = useSearchParams();
-
-  const [code, setCode] = useState(
-    params?.get("code") ? params?.get("code") : null
-  );
 
   useEffect(() => {
-    async function fetchAccessToken() {
-      if (code) {
-        const res = await getGitHubAccessToken(code);
-
-        if (res.access_token) {
-          router.push("/verifying-profile?access_token=" + res.access_token);
+    getSession().then((session) => {
+      if (session?.user) {
+        const shouldLink = localStorage.getItem("link");
+        if (shouldLink === "YOUID") {
+          localStorage.removeItem("link");
+          window.location.href = `${process.env.NEXT_PUBLIC_YOUID_URL}/link?reputationId=${process.env.NEXT_PUBLIC_REPUTATION_ID}&pwd=${session.user.id}&callbackUrl=${window.location.origin}/link`;
         }
       }
+    });
+  });
+
+  const params = useSearchParams();
+  useMemo(() => {
+    if (params?.get("link")) {
+      localStorage.setItem("link", params?.get("link") ?? "");
+      router.replace("/");
     }
-    fetchAccessToken();
-  }, [code]);
+  }, []);
 
   return (
     <Stack
@@ -85,7 +80,8 @@ export const Home: React.FC = () => {
           maxWidth="90vw"
           width={600}
         >
-          You will have to: Own a YOU ID account Own a Github with xxx{" "}
+          You will have to: Own a YOU ID account and a Github with at least 5
+          contributions.
         </Typography>
         <Button
           sx={{
@@ -104,7 +100,6 @@ export const Home: React.FC = () => {
             },
           }}
           onClick={() => {
-            //redirectToGithub();
             signIn("github");
           }}
         >
