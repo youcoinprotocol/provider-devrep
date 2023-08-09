@@ -4,13 +4,11 @@ import Lottie from "lottie-react";
 import { Button, Stack, Typography, useMediaQuery } from "@mui/material";
 import { mobile } from "@/constants/constants";
 import { useSearchParams } from "next/navigation";
-import { Airdropping } from "../Airdropping/Airdropping";
-import { getGitHubAccessToken, redirectToGithub } from "@/app/api/github.api";
-import { useEffect, useMemo, useState } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { signIn, getSession } from "next-auth/react";
 
-export const Home: React.FC = (x) => {
+export const Home: React.FC = () => {
   const isMobile = useMediaQuery(mobile);
   const router = useRouter();
 

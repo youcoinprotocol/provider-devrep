@@ -18,6 +18,7 @@ export default async function handler(
         throw new Error("Unauthorized");
       }
 
+      // Verify proofs
       const { commitment, proof, nullifierHash, pwd } = req.body;
       const group = new Group(1);
       group.addMember(`${commitment}`);
@@ -34,14 +35,19 @@ export default async function handler(
       };
 
       const verificationRes = await verifyProof(myProof, 20);
-      await prisma.user.update({
-        where: {
-          id: session.user!.id,
-        },
-        data: {
-          commitment,
-        },
-      });
+      ////
+      
+      if (verificationRes) {
+        await prisma.user.update({
+          where: {
+            id: session.user!.id,
+          },
+          data: {
+            commitment,
+          },
+        });
+      }
+
       res.status(200).json({ success: verificationRes });
     } catch (error: any) {
       console.error("Error", error.message);

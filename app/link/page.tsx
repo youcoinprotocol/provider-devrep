@@ -1,13 +1,20 @@
 "use client";
-import { Button, Stack, Typography, useMediaQuery } from "@mui/material";
+import {
+  Button,
+  Stack,
+  ThemeProvider,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { mobile } from "@/constants/constants";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Header } from "@/components/Header/Header";
 import { useRouter } from "next/navigation";
 import { callInternalAPI } from "@/helpers/api";
-import { signIn, getSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { Session } from "next-auth";
+import { theme } from "../page";
 
 const LinkPage: React.FC = () => {
   const isMobile = useMediaQuery(mobile);
@@ -68,43 +75,46 @@ const LinkPage: React.FC = () => {
   }, []);
 
   return (
-    <Stack
-      direction={isMobile ? "column" : "row"}
-      sx={{
-        width: "100vw",
-        height: "100vh",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <ThemeProvider theme={theme}>
+      <Header />
       <Stack
-        direction="column"
+        direction={isMobile ? "column" : "row"}
         sx={{
           width: "100vw",
           height: "100vh",
           justifyContent: "center",
           alignItems: "center",
         }}
-        gap={4}
       >
-        <img
-          src="/assets/youcoin.png"
-          width={178}
-          height={60}
-          style={{
-            objectFit: "contain",
+        <Stack
+          direction="column"
+          sx={{
+            width: "100vw",
+            height: "100vh",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-        />
-        <Typography
-          variant="headlineLarge"
-          pl={isMobile ? 1 : 6}
-          pr={isMobile ? 1 : 6}
-          textAlign={"center"}
+          gap={4}
         >
-          {message}
-        </Typography>
+          <img
+            src="/assets/youcoin.png"
+            width={178}
+            height={60}
+            style={{
+              objectFit: "contain",
+            }}
+          />
+          <Typography
+            variant="headlineLarge"
+            pl={isMobile ? 1 : 6}
+            pr={isMobile ? 1 : 6}
+            textAlign={"center"}
+          >
+            {message}
+          </Typography>
+        </Stack>
       </Stack>
-    </Stack>
+    </ThemeProvider>
   );
 };
 

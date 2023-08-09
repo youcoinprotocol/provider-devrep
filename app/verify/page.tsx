@@ -4,46 +4,30 @@ import { mobile } from "@/constants/constants";
 import animationData from "../../public/assets/loading.json";
 import Lottie from "lottie-react";
 import { Header } from "@/components/Header/Header";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getGithubEventByUsername, getGithubUser } from "../api/github.api";
 import { theme } from "../page";
+import { useRouter } from "next/navigation";
+import { callInternalAPI } from "@/helpers/api";
 
 const VerifyingProfile: React.FC = () => {
   const isMobile = useMediaQuery(mobile);
 
-  const params = useSearchParams();
-
-  const [accessToken, setAccessToken] = useState(
-    params?.get("access_token") ? params?.get("access_token") : null
-  );
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState("Pulling your Github contributions");
+  const router = useRouter();
 
   useEffect(() => {
-    async function fetchUserData() {
-      if (accessToken) {
-        const res = await getGithubUser(accessToken);
-
-        if (res.login) {
-          const eventRes = await getGithubEventByUsername(
-            accessToken,
-            res.login
-          );
-
-          if (eventRes.length > 0) {
-            const contributions = eventRes.data.filter((event: any) => {
-              // Customize the condition to filter relevant events (e.g., PushEvent, PullRequestEvent)
-              return (
-                event.type === "PushEvent" || event.type === "PullRequestEvent"
-              );
-            });
-
-            console.log("Contributions:", contributions);
-          }
+    callInternalAPI("/api/contributions", "POST", undefined)
+      .then((res) => {
+        if (!res.success) {
+          throw new Error("Not eligible");
         }
-      }
-    }
-    fetchUserData();
-  }, [accessToken]);
+        router.push("/claim");
+      })
+      .catch((err) => {
+        router.replace("/ineligible");
+      });
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -72,13 +56,15 @@ const VerifyingProfile: React.FC = () => {
           pr={isMobile ? 1 : 6}
           textAlign={"center"}
         >
-          Verifying your profile
+          {message}
         </Typography>
-        <Lottie
-          loop
-          animationData={animationData}
-          style={{ width: "100px", height: "100px" }}
-        />
+        {loading && (
+          <Lottie
+            loop
+            animationData={animationData}
+            style={{ width: "100px", height: "100px" }}
+          />
+        )}
       </Stack>
     </ThemeProvider>
   );

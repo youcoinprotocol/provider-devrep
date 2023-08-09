@@ -61,7 +61,7 @@ const ClaimSuccess: React.FC<Props> = ({ amount, uid }) => {
           Claim Success!
         </Typography>
         <Typography variant="bodyMedium" textAlign="center">
-          Check your wallet now!
+          Your $YOU tokens will be delivered to you shortly.
         </Typography>
       </Stack>
     </ThemeProvider>

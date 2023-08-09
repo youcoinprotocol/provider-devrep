@@ -1,5 +1,5 @@
 "use client";
-import animationData from "../../components/Home/card_animation.json";
+import animationData from "@/components/Home/card_animation.json";
 import Lottie from "lottie-react";
 import {
   Button,
@@ -9,35 +9,13 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { mobile } from "@/constants/constants";
-import { useSearchParams } from "next/navigation";
-import { getGitHubAccessToken, redirectToGithub } from "@/app/api/github.api";
-import { useEffect, useState } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { theme } from "@/app/page";
 import { Header } from "@/components/Header/Header";
 
-const Claimed: React.FC = () => {
+const Uneligible: React.FC = () => {
   const isMobile = useMediaQuery(mobile);
   const router = useRouter();
-
-  const params = useSearchParams();
-
-  const [code, setCode] = useState(
-    params?.get("code") ? params?.get("code") : null
-  );
-
-  useEffect(() => {
-    async function fetchAccessToken() {
-      if (code) {
-        const res = await getGitHubAccessToken(code);
-
-        if (res.access_token) {
-          router.push("/verifying-profile?access_token=" + res.access_token);
-        }
-      }
-    }
-    fetchAccessToken();
-  }, [code]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -63,7 +41,7 @@ const Claimed: React.FC = () => {
             mt={isMobile ? 6 : 0}
             textAlign={"center"}
           >
-            Duplicate GitHub Profile Detected{" "}
+            Opps, you are not eligible for the claim
           </Typography>
           <Typography
             variant="bodyMedium"
@@ -71,8 +49,8 @@ const Claimed: React.FC = () => {
             maxWidth="90vw"
             width={600}
           >
-            A GitHub profile can only be claimed once. Please use a different
-            GitHub profile.
+            Your profile does not currently meet the requirements. Please check
+            back later to claim.
           </Typography>
           <Button
             sx={{
@@ -91,10 +69,10 @@ const Claimed: React.FC = () => {
               },
             }}
             onClick={() => {
-              redirectToGithub();
+              router.push("/");
             }}
           >
-            Connect Your Github
+            Back to Home
           </Button>
         </Stack>
         <Lottie loop animationData={animationData} style={{ width: "50vw" }} />
@@ -103,4 +81,4 @@ const Claimed: React.FC = () => {
   );
 };
 
-export default Claimed;
+export default Uneligible;
