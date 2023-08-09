@@ -429,7 +429,7 @@ const addMemberToGroup = async (commitment: string) => {
 
   const contract = new ethers.Contract(process.env.CONTRACT_ADDR, ABI, wallet);
   const tx = await contract.addMember(process.env.GROUP_ID, commitment);
-  console.log(tx);
+  console.log("Added to group #", tx.hash);
 };
 
 export default async function handler(
