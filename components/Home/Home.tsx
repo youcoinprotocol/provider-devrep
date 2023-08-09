@@ -4,25 +4,32 @@ import Lottie from "lottie-react";
 import { Button, Stack, Typography, useMediaQuery } from "@mui/material";
 import { mobile } from "@/constants/constants";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, getSession } from "next-auth/react";
 
 export const Home: React.FC = () => {
   const isMobile = useMediaQuery(mobile);
   const router = useRouter();
+  const [isRequesting, setIsRequesting] = useState(false);
 
   useEffect(() => {
     getSession().then((session) => {
       if (session?.user) {
         const shouldLink = localStorage.getItem("link");
+        const shouldVerify = localStorage.getItem("shouldVerify");
         if (shouldLink === "YOUID") {
           localStorage.removeItem("link");
           window.location.href = `${process.env.NEXT_PUBLIC_YOUID_URL}/link?reputationId=${process.env.NEXT_PUBLIC_REPUTATION_ID}&pwd=${session.user.id}&callbackUrl=${window.location.origin}/link`;
+        } else {
+          if (shouldVerify === "1") {
+            localStorage.removeItem("shouldVerify");
+            return router.push("/verify");
+          }
         }
       }
     });
-  });
+  }, []);
 
   const params = useSearchParams();
   useMemo(() => {
@@ -98,6 +105,7 @@ export const Home: React.FC = () => {
             },
           }}
           onClick={() => {
+            localStorage.setItem("shouldVerify", "1");
             signIn("github");
           }}
         >
