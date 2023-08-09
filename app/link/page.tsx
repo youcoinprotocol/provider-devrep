@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { Header } from "@/components/Header/Header";
 import { useRouter } from "next/navigation";
 import { callInternalAPI } from "@/helpers/api";
+import { signIn, getSession } from "next-auth/react";
+import { Session } from "next-auth";
 
 const LinkPage: React.FC = () => {
   const isMobile = useMediaQuery(mobile);
@@ -17,9 +19,8 @@ const LinkPage: React.FC = () => {
   const router = useRouter();
   const [message, setMessage] = useState("Linking...");
 
-  const processLinking = async () => {
-    //TODO: Compare against localstorage
-    if (pwd !== "123456") {
+  const processLinking = async (session: Session) => {
+    if (pwd !== session.user?.id.toString()) {
       setMessage(
         "Unable to verify your ID, redirecting to home page in 5 seconds..."
       );
@@ -37,10 +38,10 @@ const LinkPage: React.FC = () => {
         commitment,
       });
       if (res.success) {
-        setMessage("Link success! Redirecting to home page in 5 seconds...");
+        setMessage("Link success!");
         setTimeout(() => {
-          router.push("/");
-        }, 5000);
+          router.push("/verify");
+        }, 500);
       } else {
         throw new Error();
       }
@@ -56,9 +57,14 @@ const LinkPage: React.FC = () => {
 
   useEffect(() => {
     if (!commitment || !nullifierHash || !pwd || !proofs) {
-      router.replace("/");
+      return router.replace("/");
     }
-    processLinking();
+    getSession().then((session) => {
+      if (!session) {
+        return router.replace("/");
+      }
+      processLinking(session as Session);
+    });
   }, []);
 
   return (

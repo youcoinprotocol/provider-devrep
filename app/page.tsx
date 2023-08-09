@@ -110,7 +110,7 @@ export default function Page() {
   return (
     <ThemeProvider theme={theme}>
       <Header />
-      <Home />
+      <Home  />
     </ThemeProvider>
   );
 }
