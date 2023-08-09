@@ -8,6 +8,8 @@ import { LoadingButton } from "@mui/lab";
 import { useWeb3React } from "@web3-react/core";
 import { InjectedConnector } from "@web3-react/injected-connector";
 import { CustomSnackbar } from "@/components/CustomSnackbar/CustomSnackbar";
+import { callInternalAPI } from "@/helpers/api";
+import { useRouter } from "next/navigation";
 
 const injected = new InjectedConnector({});
 
@@ -17,6 +19,7 @@ export const ClaimPage: React.FC = () => {
   const { library, activate, account, active } = useWeb3React();
   const [error, setError] = useState("");
   const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
+  const router = useRouter();
 
   const claim = async () => {
     setIsProcessing(true);
@@ -27,27 +30,20 @@ export const ClaimPage: React.FC = () => {
     try {
       const signature = await library.provider.request({
         method: "personal_sign",
-        params: [`$YOU airdrop for TOSHI`, account],
+        params: [`$YOU Github airdrop`, account],
       });
-      // Send signature
-      // const resp = await callAPI(`/airdrops`, "POST", undefined, {
-      //   data: {
-      //     type: "TOSHI",
-      //     sig: signature,
-      //     address: account,
-      //   },
-      // });
-      setIsProcessing(false);
-      // if (!resp?.data?.success) {
-      //   // redirect to not eligible page
-      //   router.push("/not-eligible");
-      // } else {
-      //   router.push("/missions");
-      // }
+
+      const resp = await callInternalAPI(`/api/claims`, "POST", undefined, {
+        sig: signature,
+        address: account,
+      });
+
+      if (resp?.success) {
+        router.push("/claim/success");
+      }
     } catch (e) {
       console.log(e);
       setIsProcessing(false);
-      // router.push("/error");
     }
   };
 
@@ -109,7 +105,7 @@ export const ClaimPage: React.FC = () => {
               color: "white",
             },
           }}
-          onClick={connectWallet}
+          onClick={account ? claim : connectWallet}
           loading={isProcessing}
         >
           Connect Wallet to Claim
