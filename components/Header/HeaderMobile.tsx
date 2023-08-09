@@ -1,9 +1,39 @@
 import { mobile } from "@/constants/constants";
-import { Stack, Typography, useMediaQuery } from "@mui/material";
+import {
+  Menu,
+  MenuItem,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import Link from "next/link";
+import { useWeb3React } from "@web3-react/core";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+var truncate = function (fullStr: string, strLen: number, separator: string) {
+  if (fullStr.length <= strLen) return fullStr;
+
+  separator = separator || "...";
+
+  var sepLen = separator.length,
+    charsToShow = strLen - sepLen,
+    frontChars = Math.ceil(charsToShow / 2),
+    backChars = Math.floor(charsToShow / 2);
+
+  return (
+    fullStr.substring(0, frontChars) +
+    separator +
+    fullStr.substring(fullStr.length - backChars)
+  );
+};
 
 export const HeaderMobile: React.FC = () => {
   const isMobile = useMediaQuery(mobile);
+  const { library, activate, account, active, deactivate } = useWeb3React();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [openMenu, setOpenMenu] = useState(false);
+  const router = useRouter();
 
   return (
     <Stack
@@ -26,8 +56,7 @@ export const HeaderMobile: React.FC = () => {
         justifyContent="center"
       >
         <Link
-          href="https://youcoin.org/"
-          target="_blank"
+          href="/"
           style={{
             textDecoration: "none",
           }}
@@ -86,20 +115,20 @@ export const HeaderMobile: React.FC = () => {
           </Typography>
         </Link>
       </Stack>
-      <Stack
-        direction="column"
-        gap={1}
-        position="fixed"
-        sx={{
-          bottom: 24,
-          left: 24,
-        }}
-      >
-        <Link
-          href="https://basescan.org/token/0x0fa70e156cd3b03ac4080bfe55bd8ab50f5bcb98"
-          target="_blank"
-          style={{
-            textDecoration: "none",
+      {!!account && (
+        <Stack
+          direction="column"
+          gap={1}
+          alignItems="flex-end"
+          position="fixed"
+          sx={{
+            bottom: 24,
+            right: 24,
+            cursor: "pointer",
+          }}
+          ref={(el) => setAnchorEl(el)}
+          onClick={() => {
+            setOpenMenu(true);
           }}
         >
           <Typography
@@ -110,16 +139,36 @@ export const HeaderMobile: React.FC = () => {
           >
             Wallet Connected
           </Typography>
-        </Link>
-        <Typography
-          variant="bodyMedium"
-          color="#1C1C1E"
-          fontWeight={300}
-          fontSize={12}
+          <Typography
+            variant="bodyMedium"
+            color="#1C1C1E"
+            fontWeight={300}
+            fontSize={12}
+          >
+            {truncate(account, 20, "...")}
+          </Typography>
+        </Stack>
+      )}
+      <Menu
+        anchorEl={anchorEl}
+        open={openMenu}
+        onClose={() => {
+          setOpenMenu(false);
+        }}
+        sx={{
+          mt: 2,
+        }}
+      >
+        <MenuItem
+          onClick={() => {
+            deactivate();
+            setOpenMenu(false);
+            router.push("/");
+          }}
         >
-          0x0FA70E156...
-        </Typography>
-      </Stack>
+          Logout
+        </MenuItem>
+      </Menu>
     </Stack>
   );
 };
