@@ -87,29 +87,65 @@ export const ClaimPage: React.FC = () => {
           pr={isMobile ? 1 : 6}
           textAlign={"center"}
         >
-          You are eligible to claim 100 $YOU{" "}
+          Your credentials have been validated.
         </Typography>
-        <LoadingButton
-          sx={{
-            borderRadius: "16px",
-            pl: 3,
-            pr: 3,
-            pt: 1.5,
-            pb: 1.5,
-            background: "#FF8600",
-            boxShadow: "0px 0px 20px 0px rgba(0, 0, 0, 0.05)",
-            color: "white",
-            "&:hover": {
-              opacity: 0.5,
-              background: "#FF8600",
-              color: "white",
-            },
-          }}
-          onClick={account ? claim : connectWallet}
-          loading={isProcessing}
+        <Typography
+          variant="bodyMedium"
+          fontWeight={500}
+          pl={isMobile ? 1 : 6}
+          pr={isMobile ? 1 : 6}
+          textAlign={"center"}
         >
-          Connect Wallet to Claim
-        </LoadingButton>
+          View them in your YOU ID app. Connect wallet to claim $YOU rewards
+          now.{" "}
+        </Typography>
+        <Stack direction={"row"} gap={2}>
+          <LoadingButton
+            sx={{
+              borderRadius: "16px",
+              pl: 3,
+              pr: 3,
+              pt: 1.5,
+              pb: 1.5,
+              border: "1px solid #FF8600",
+              boxShadow: "0px 0px 20px 0px rgba(0, 0, 0, 0.05)",
+              color: "black",
+              "&:hover": {
+                opacity: 0.5,
+                background: "#FF8600",
+                color: "white",
+              },
+            }}
+            onClick={account ? claim : connectWallet}
+            loading={isProcessing}
+          >
+            Claim $YOU
+          </LoadingButton>
+
+          <LoadingButton
+            sx={{
+              borderRadius: "16px",
+              pl: 3,
+              pr: 3,
+              pt: 1.5,
+              pb: 1.5,
+              border: "1px solid #FF8600",
+              boxShadow: "0px 0px 20px 0px rgba(0, 0, 0, 0.05)",
+              color: "black",
+              "&:hover": {
+                opacity: 0.5,
+                background: "#FF8600",
+                color: "white",
+              },
+            }}
+            onClick={() => {
+              return window.open("https://id.youcoin.org", "_blank");
+            }}
+            loading={isProcessing}
+          >
+            View Credentials
+          </LoadingButton>
+        </Stack>
       </Stack>
       <CustomSnackbar
         severity="error"

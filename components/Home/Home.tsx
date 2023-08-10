@@ -68,7 +68,7 @@ export const Home: React.FC = () => {
           mt={isMobile ? 6 : 0}
           textAlign={"center"}
         >
-          We’re giving $YOU to Developers{" "}
+          $20 worth of $YOU for Developers{" "}
         </Typography>
         <Typography
           variant="bodyMedium"
@@ -76,7 +76,7 @@ export const Home: React.FC = () => {
           maxWidth="90vw"
           width={600}
         >
-          Connect your github and prove that you are a software developer.
+          Connect your Github and validate your developer credentials.
         </Typography>
         <Typography
           variant="bodyMedium"
@@ -84,16 +84,7 @@ export const Home: React.FC = () => {
           maxWidth="90vw"
           width={600}
         >
-          Get $100 worth of $YOU.
-        </Typography>
-        <Typography
-          variant="bodyMedium"
-          textAlign="center"
-          maxWidth="90vw"
-          width={600}
-        >
-          You will have to: Own a YOU ID account and a Github with at least 5
-          contributions.
+          Click here to view all available credentials.
         </Typography>
         <Button
           sx={{
@@ -121,7 +112,7 @@ export const Home: React.FC = () => {
           {isLoading ? (
             <CircularProgress size={20} color="inherit" />
           ) : (
-            "Connect Your Github"
+            "Connect Github"
           )}
         </Button>
       </Stack>

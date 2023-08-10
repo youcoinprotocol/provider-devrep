@@ -13,7 +13,9 @@ const VerifyingProfile: React.FC = () => {
   const isMobile = useMediaQuery(mobile);
 
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState("Pulling your Github contributions");
+  const [message, setMessage] = useState(
+    "Validating your developer credentials"
+  );
   const router = useRouter();
 
   useEffect(() => {

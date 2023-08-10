@@ -24,12 +24,12 @@ const LinkPage: React.FC = () => {
   const pwd = params?.get("pwd");
   const proofs = params?.get("proofs");
   const router = useRouter();
-  const [message, setMessage] = useState("Linking...");
+  const [message, setMessage] = useState("Linking your profile with YOU ID...");
 
   const processLinking = async (session: Session) => {
     if (pwd !== session.user?.id.toString()) {
       setMessage(
-        "Unable to verify your ID, redirecting to home page in 5 seconds..."
+        "Unable to verify your ID, redirecting back to home in 5 seconds..."
       );
       setTimeout(() => {
         router.push("/");
@@ -45,7 +45,7 @@ const LinkPage: React.FC = () => {
         commitment,
       });
       if (res.success) {
-        setMessage("Link success!");
+        setMessage("Linked success!");
         setTimeout(() => {
           router.push("/verify");
         }, 500);
@@ -54,7 +54,7 @@ const LinkPage: React.FC = () => {
       }
     } catch (e) {
       setMessage(
-        "Unable to verify your ID, redirecting to home page in 5 seconds..."
+        "Unable to verify your ID, redirecting back to home in 5 seconds..."
       );
       setTimeout(() => {
         router.push("/");
