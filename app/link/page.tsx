@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { callInternalAPI } from "@/helpers/api";
 import { getSession } from "next-auth/react";
 import { Session } from "next-auth";
-import { theme } from "../page";
+import { theme } from "@/constants/theme";
 
 const LinkPage: React.FC = () => {
   const isMobile = useMediaQuery(mobile);

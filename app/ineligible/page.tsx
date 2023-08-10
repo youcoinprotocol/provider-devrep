@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { mobile } from "@/constants/constants";
 import { useRouter } from "next/navigation";
-import { theme } from "@/app/page";
+import { theme } from "@/constants/theme";
 import { Header } from "@/components/Header/Header";
 
 const Uneligible: React.FC = () => {

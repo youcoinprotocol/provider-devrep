@@ -27,7 +27,7 @@ export const Home: React.FC = () => {
         const shouldVerify = localStorage.getItem("shouldVerify");
         if (shouldLink === "YOUID") {
           localStorage.removeItem("link");
-          window.location.href = `${process.env.NEXT_PUBLIC_YOUID_URL}/link?reputationId=${process.env.NEXT_PUBLIC_REPUTATION_ID}&pwd=${session.user.id}&callbackUrl=${window.location.origin}/link`;
+          window.location.href = `${process.env.NEXT_PUBLIC_YOUID_URL}/link?reputationId=${process.env.NEXT_PUBLIC_REPUTATION_ID}&pwd=${(session.user as any).id}&callbackUrl=${window.location.origin}/link`;
         } else {
           if (shouldVerify === "1") {
             localStorage.removeItem("shouldVerify");

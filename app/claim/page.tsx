@@ -4,7 +4,7 @@ import React from "react";
 import { ThemeProvider } from "@mui/material";
 import Web3 from "web3";
 import { Web3ReactProvider } from "@web3-react/core";
-import { theme } from "../page";
+import { theme } from "@/constants/theme";
 import { ClaimPage } from "@/components/ClaimPage/ClaimPage";
 
 const getLibrary = (provider: any) => new Web3(provider);

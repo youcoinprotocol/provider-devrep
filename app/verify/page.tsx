@@ -5,7 +5,7 @@ import animationData from "../../public/assets/loading.json";
 import Lottie from "lottie-react";
 import { Header } from "@/components/Header/Header";
 import { useEffect, useState } from "react";
-import { theme } from "../page";
+import { theme } from "@/constants/theme";
 import { useRouter } from "next/navigation";
 import { callInternalAPI } from "@/helpers/api";
 

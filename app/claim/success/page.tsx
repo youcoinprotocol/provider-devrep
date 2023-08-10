@@ -4,20 +4,12 @@ import { Stack, ThemeProvider, Typography, useMediaQuery } from "@mui/material";
 import { mobile } from "@/constants/constants";
 import Lottie from "lottie-react";
 import animationData from "./falling-coin.json";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { callAPI } from "@/helpers/api";
 import { Header } from "@/components/Header/Header";
-import { theme } from "@/app/page";
+import { theme } from "@/constants/theme";
 
-type Props = {
-  amount: number;
-  uid?: string;
-};
-
-const ClaimSuccess: React.FC<Props> = ({ amount, uid }) => {
+const ClaimSuccess: React.FC = () => {
   const isMobile = useMediaQuery(mobile);
-  const router = useRouter();
 
   return (
     <ThemeProvider theme={theme}>
