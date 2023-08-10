@@ -1,7 +1,13 @@
 "use client";
 import animationData from "./card_animation.json";
 import Lottie from "lottie-react";
-import { Button, Stack, Typography, useMediaQuery } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { mobile } from "@/constants/constants";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -12,6 +18,7 @@ export const Home: React.FC = () => {
   const isMobile = useMediaQuery(mobile);
   const router = useRouter();
   const [isRequesting, setIsRequesting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getSession().then((session) => {
@@ -61,7 +68,7 @@ export const Home: React.FC = () => {
           mt={isMobile ? 6 : 0}
           textAlign={"center"}
         >
-          We’re giving $YOU to Developers{" "}
+          $20 worth of $YOU for Developers{" "}
         </Typography>
         <Typography
           variant="bodyMedium"
@@ -69,7 +76,7 @@ export const Home: React.FC = () => {
           maxWidth="90vw"
           width={600}
         >
-          Connect your github and prove that you are a software developer.
+          Connect your Github and validate your developer credentials.
         </Typography>
         <Typography
           variant="bodyMedium"
@@ -77,16 +84,7 @@ export const Home: React.FC = () => {
           maxWidth="90vw"
           width={600}
         >
-          Get $100 worth of $YOU.
-        </Typography>
-        <Typography
-          variant="bodyMedium"
-          textAlign="center"
-          maxWidth="90vw"
-          width={600}
-        >
-          You will have to: Own a YOU ID account and a Github with at least 5
-          contributions.
+          Click here to view all available credentials.
         </Typography>
         <Button
           sx={{
@@ -105,11 +103,17 @@ export const Home: React.FC = () => {
             },
           }}
           onClick={() => {
+            setIsLoading(true);
             localStorage.setItem("shouldVerify", "1");
             signIn("github");
           }}
+          disabled={isLoading}
         >
-          Connect Your Github
+          {isLoading ? (
+            <CircularProgress size={20} color="inherit" />
+          ) : (
+            "Connect Github"
+          )}
         </Button>
       </Stack>
       <Lottie loop animationData={animationData} style={{ width: "50vw" }} />

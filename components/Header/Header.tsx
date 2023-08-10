@@ -60,8 +60,8 @@ export const Header: React.FC = () => {
         }}
       >
         <Typography
-          variant="bodySmall"
-          fontSize={16}
+          variant="bodyMedium"
+          fontSize={14}
           fontWeight={300}
           sx={{
             "&:hover": {
@@ -80,8 +80,8 @@ export const Header: React.FC = () => {
         }}
       >
         <Typography
-          variant="bodySmall"
-          fontSize={16}
+          variant="bodyMedium"
+          fontSize={14}
           fontWeight={300}
           sx={{
             "&:hover": {
@@ -100,8 +100,8 @@ export const Header: React.FC = () => {
         }}
       >
         <Typography
-          variant="bodySmall"
-          fontSize={16}
+          variant="bodyMedium"
+          fontSize={14}
           fontWeight={300}
           sx={{
             "&:hover": {

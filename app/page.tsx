@@ -53,25 +53,30 @@ export const theme = createTheme({
         },
         superscript: {
           color: "#3B3F53",
-          fontSize: 16,
+          fontSize: 12,
           fontWeight: 700,
         },
         bodyMedium: {
           color: "rgba(28, 28, 30, 1)",
-          fontSize: 18,
+          fontSize: 14,
           fontWeight: 300,
         },
         bodySmall: {
           color: "#3B3F53",
-          fontSize: 14,
+          fontSize: 12,
           fontWeight: 400,
           whiteSpace: "pre-line",
           lineHeight: 1.5,
         },
         headlineLarge: {
           color: "rgba(28, 28, 30, 1)",
-          fontSize: 60,
+          fontSize: 36,
           fontWeight: 500,
+          [defaultTheme.breakpoints.down("md")]: {
+            fontSize: 36,
+            paddingleft: "16px",
+            paddingRight: "16px",
+          },
         },
         headlineMedium: {
           fontSize: 28,
@@ -110,7 +115,7 @@ export default function Page() {
   return (
     <ThemeProvider theme={theme}>
       <Header />
-      <Home  />
+      <Home />
     </ThemeProvider>
   );
 }
