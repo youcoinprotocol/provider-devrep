@@ -70,8 +70,13 @@ export const theme = createTheme({
         },
         headlineLarge: {
           color: "rgba(28, 28, 30, 1)",
-          fontSize: 60,
+          fontSize: 58,
           fontWeight: 500,
+          [defaultTheme.breakpoints.down("md")]: {
+            fontSize: 48,
+            paddingleft: "16px",
+            paddingRight: "16px",
+          },
         },
         headlineMedium: {
           fontSize: 28,
@@ -110,7 +115,7 @@ export default function Page() {
   return (
     <ThemeProvider theme={theme}>
       <Header />
-      <Home  />
+      <Home />
     </ThemeProvider>
   );
 }
