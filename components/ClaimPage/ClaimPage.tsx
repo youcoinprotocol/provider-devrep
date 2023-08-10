@@ -139,7 +139,7 @@ export const ClaimPage: React.FC = () => {
               },
             }}
             onClick={() => {
-              return window.open("https://id.youcoin.org", "_blank");
+              return window.open(process.env.NEXT_PUBLIC_YOUCOIN_URL, "_blank");
             }}
             loading={isProcessing}
           >
