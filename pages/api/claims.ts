@@ -31,7 +31,7 @@ export default async function handler(
         !user ||
         user.isClaimed ||
         !user.commitment ||
-        user.contributions < process.env.MIN_CONTRIBUTIONS
+        user.contributions < parseInt(process.env.MIN_CONTRIBUTIONS ?? "5")
       ) {
         throw new Error("Unauthorized");
       }

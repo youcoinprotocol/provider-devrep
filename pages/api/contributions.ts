@@ -425,9 +425,16 @@ const addMemberToGroup = async (commitment: string) => {
     return;
   }
   const provider = new ethers.JsonRpcProvider(process.env.JSONRPC);
-  const wallet = new ethers.Wallet(process.env.WALLET_PRIVATEKEY, provider);
+  const wallet = new ethers.Wallet(
+    process.env.WALLET_PRIVATEKEY ?? "",
+    provider
+  );
 
-  const contract = new ethers.Contract(process.env.CONTRACT_ADDR, ABI, wallet);
+  const contract = new ethers.Contract(
+    process.env.CONTRACT_ADDR ?? "",
+    ABI,
+    wallet
+  );
   const tx = await contract.addMember(process.env.GROUP_ID, commitment);
   console.log("Added to group #", tx.hash);
 };
