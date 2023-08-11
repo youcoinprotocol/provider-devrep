@@ -34,9 +34,19 @@ export default async function handler(
         proof,
       };
 
+      const user = await prisma.user.findUnique({
+        where: {
+          commitment: commitment,
+        },
+      });
+
+      if (user) {
+        res.status(403).json({ error: "Duplicated key" });
+      }
+
       const verificationRes = await verifyProof(myProof, 20);
       ////
-      
+
       if (verificationRes) {
         await prisma.user.update({
           where: {
