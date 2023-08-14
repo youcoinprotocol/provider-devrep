@@ -51,6 +51,8 @@ npm  run  dev
 
 ```
 
+## Usage
+Please refer to [usage.md](usage.md)
   
 
 ## **Current Features**
