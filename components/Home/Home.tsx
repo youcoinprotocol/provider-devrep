@@ -35,7 +35,9 @@ export const Home: React.FC = () => {
           }&callbackUrl=${window.location.origin}/link`;
           return;
         } else {
-          return router.replace(process.env.NEXT_PUBLIC_YOUID_URL ?? "/");
+          signOut({ redirect: false }).then((res) => {
+            router.replace(process.env.NEXT_PUBLIC_YOUID_URL ?? "/");
+          });
         }
       }
     });

@@ -32,7 +32,9 @@ const LinkPage: React.FC = () => {
         "Unable to verify your ID, redirecting back to home in 5 seconds..."
       );
       localStorage.clear();
-      signOut();
+      await signOut({
+        redirect: false,
+      });
       setTimeout(() => {
         router.replace("/");
       }, 5000);
@@ -59,7 +61,7 @@ const LinkPage: React.FC = () => {
         "Unable to verify your ID, redirecting back to home in 5 seconds..."
       );
 
-      signOut({
+      await signOut({
         redirect: false,
       });
       localStorage.clear();
