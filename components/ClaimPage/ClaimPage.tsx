@@ -10,6 +10,7 @@ import { InjectedConnector } from "@web3-react/injected-connector";
 import { CustomSnackbar } from "@/components/CustomSnackbar/CustomSnackbar";
 import { callInternalAPI } from "@/helpers/api";
 import { useRouter } from "next/navigation";
+import { getSession } from "next-auth/react";
 
 const injected = new InjectedConnector({});
 
@@ -20,6 +21,18 @@ export const ClaimPage: React.FC = () => {
   const [error, setError] = useState("");
   const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    getSession().then((session) => {
+      console.log(session)
+      if (!session?.user) {
+        return router.replace("/");
+      }
+      if (session.user.isClaimed) {
+        return router.replace("/claim/success");
+      }
+    });
+  }, []);
 
   const claim = async () => {
     setIsProcessing(true);
@@ -52,6 +65,7 @@ export const ClaimPage: React.FC = () => {
     await activate(injected, (err) => {
       setError("Error connecting wallet.");
       setOpenErrorSnackbar(true);
+      setIsProcessing(false);
     });
   };
 
