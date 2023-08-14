@@ -1,0 +1,13 @@
+{
+  "logo": "https://devrep-assets.youcoin.org/logo.png",
+  "description": "Earn dev skills recognition",
+  "linkUrl": "https://devrep.youcoin.org/?link=YOUID",
+  "traits": [
+    {
+      "id": 1000,
+      "name": "GIT Star",
+      "description": "Contributed to open source community",
+      "logo": "https://s3.eu-west-1.amazonaws.com/devrep-assets.youcoin.org/Group+111+(1).png"
+    }
+  ]
+}
