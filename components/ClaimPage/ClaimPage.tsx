@@ -24,7 +24,6 @@ export const ClaimPage: React.FC = () => {
 
   useEffect(() => {
     getSession().then((session) => {
-      console.log(session)
       if (!session?.user) {
         return router.replace("/");
       }
