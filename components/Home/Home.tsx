@@ -71,7 +71,7 @@ export const Home: React.FC = () => {
           mt={isMobile ? 6 : 0}
           textAlign={"center"}
         >
-          $20 worth of $YOU for Developers{" "}
+          2000 $YOU for Developers
         </Typography>
         <Typography
           variant="bodyMedium"
