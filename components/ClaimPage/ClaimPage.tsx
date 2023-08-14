@@ -49,13 +49,16 @@ export const ClaimPage: React.FC = () => {
         sig: signature,
         address: account,
       });
-
+      setIsProcessing(false);
       if (resp?.success) {
         router.push("/claim/success");
+      } else {
+        router.push("/ineligible");
       }
     } catch (e) {
       console.log(e);
       setIsProcessing(false);
+      router.push("/ineligible");
     }
   };
 
