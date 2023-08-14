@@ -31,9 +31,10 @@ const LinkPage: React.FC = () => {
       setMessage(
         "Unable to verify your ID, redirecting back to home in 5 seconds..."
       );
+      localStorage.clear();
+      signOut();
       setTimeout(() => {
-        localStorage.clear();
-        router.push("/");
+        router.replace("/");
       }, 5000);
       return;
     }
@@ -48,7 +49,7 @@ const LinkPage: React.FC = () => {
       if (res.success) {
         setMessage("Linked successful!");
         setTimeout(() => {
-          router.push("/verify");
+          router.replace("/verify");
         }, 500);
       } else {
         throw new Error();
@@ -57,10 +58,14 @@ const LinkPage: React.FC = () => {
       setMessage(
         "Unable to verify your ID, redirecting back to home in 5 seconds..."
       );
+
+      signOut({
+        redirect: false,
+      });
+      localStorage.clear();
+
       setTimeout(() => {
-        signOut();
-        localStorage.clear();
-        router.push("/");
+        return router.replace("/");
       }, 5000);
     }
   };
@@ -70,7 +75,7 @@ const LinkPage: React.FC = () => {
       return router.replace("/");
     }
     getSession().then((session) => {
-      if (!session) {
+      if (!session?.user) {
         return router.replace("/");
       }
       processLinking(session as Session);

@@ -30,8 +30,9 @@ export const Home: React.FC = () => {
           }/link?reputationId=${process.env.NEXT_PUBLIC_REPUTATION_ID}&pwd=${
             (session.user as any).id
           }&callbackUrl=${window.location.origin}/link`;
+          return;
         } else {
-          signOut();
+          return router.replace(process.env.NEXT_PUBLIC_YOUID_URL ?? "/");
         }
       }
     });
