@@ -461,6 +461,10 @@ export default async function handler(
         throw new Error("Unauthorized");
       }
 
+      if (user.contributions > 0) {
+        throw new Error("Duplicated entry");
+      }
+      
       const account = user.accounts[0];
 
       // Get github user
