@@ -29,46 +29,47 @@ export default async function handler(
 
       if (
         !user ||
-        user.isClaimed ||
         !user.commitment ||
         user.contributions < parseInt(process.env.MIN_CONTRIBUTIONS ?? "5")
       ) {
         throw new Error("Unauthorized");
       }
 
-      const { sig, address } = req.body;
-      const sigAddress = ethers
-        .verifyMessage(`$YOU Github airdrop`, sig)
-        .toLowerCase();
-      if (sigAddress.toLowerCase() !== address.toLowerCase()) {
-        throw new Error("Invalid signature");
-      }
+      if (!user.isClaimed) {
+        const { sig, address } = req.body;
+        const sigAddress = ethers
+          .verifyMessage(`$YOU Github airdrop`, sig)
+          .toLowerCase();
+        if (sigAddress.toLowerCase() !== address.toLowerCase()) {
+          throw new Error("Invalid signature");
+        }
 
-      await prisma.user.update({
-        where: {
-          id: session.user!.id,
-        },
-        data: {
-          walletAddress: sigAddress,
-          isClaimed: true,
-        },
-      });
-
-      const airdropRes = await fetch(`${process.env.AIRDROP_API}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.AIRDROP_API_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data: {
-            address: sigAddress,
-            status: "PENDING",
-            type: "DEVREP",
-            amount: parseInt(process.env.AIRDROP_AMOUNT ?? "0"),
+        await prisma.user.update({
+          where: {
+            id: session.user!.id,
           },
-        }),
-      });
+          data: {
+            walletAddress: sigAddress,
+            isClaimed: true,
+          },
+        });
+
+        const airdropRes = await fetch(`${process.env.AIRDROP_API}`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.AIRDROP_API_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            data: {
+              address: sigAddress,
+              status: "PENDING",
+              type: "DEVREP",
+              amount: parseInt(process.env.AIRDROP_AMOUNT ?? "0"),
+            },
+          }),
+        });
+      }
 
       success = true;
 
