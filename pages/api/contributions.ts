@@ -462,51 +462,58 @@ export default async function handler(
       }
 
       if (user.contributions > 0) {
+        if (
+          user.contributions >= parseInt(process.env.MIN_CONTRIBUTIONS ?? "5")
+        ) {
+          success = true;
+        }
         throw new Error("Duplicated entry");
       }
-      
-      const account = user.accounts[0];
 
-      // Get github user
-      const userResponse = await fetch(`https://api.github.com/user`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${account.access_token}`,
-        },
-      });
-      const snapshotDate = moment("2023-08-01");
-      const githubUser = await userResponse.json();
-      const githubUserPage = await fetch(
-        `https://github.com/users/${githubUser.login}/contributions`
-      );
-      let contributions = 0;
+      if (!success) {
+        const account = user.accounts[0];
 
-      if (githubUserPage) {
-        const body = await githubUserPage.text();
-        const doc = parse(body);
-        const nodes = doc
-          .querySelectorAll(".ContributionCalendar-day")
-          .filter(
-            (node) =>
-              parseInt(node.getAttribute("data-level") ?? "0") > 0 &&
-              node.getAttribute("data-date") &&
-              moment(node.getAttribute("data-date")).diff(snapshotDate) < 0
-          );
-
-        contributions = nodes.length;
-      }
-
-      if (contributions >= parseInt(process.env.MIN_CONTRIBUTIONS ?? "5")) {
-        success = true;
-        await prisma.user.update({
-          where: {
-            id: session.user!.id,
-          },
-          data: {
-            contributions,
+        // Get github user
+        const userResponse = await fetch(`https://api.github.com/user`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${account.access_token}`,
           },
         });
-        addMemberToGroup(session.user!.commitment ?? "");
+        const snapshotDate = moment("2023-08-01");
+        const githubUser = await userResponse.json();
+        const githubUserPage = await fetch(
+          `https://github.com/users/${githubUser.login}/contributions`
+        );
+        let contributions = 0;
+
+        if (githubUserPage) {
+          const body = await githubUserPage.text();
+          const doc = parse(body);
+          const nodes = doc
+            .querySelectorAll(".ContributionCalendar-day")
+            .filter(
+              (node) =>
+                parseInt(node.getAttribute("data-level") ?? "0") > 0 &&
+                node.getAttribute("data-date") &&
+                moment(node.getAttribute("data-date")).diff(snapshotDate) < 0
+            );
+
+          contributions = nodes.length;
+        }
+
+        if (contributions >= parseInt(process.env.MIN_CONTRIBUTIONS ?? "5")) {
+          success = true;
+          await prisma.user.update({
+            where: {
+              id: session.user!.id,
+            },
+            data: {
+              contributions,
+            },
+          });
+          addMemberToGroup(session.user!.commitment ?? "");
+        }
       }
 
       res.status(200).json({ success });
