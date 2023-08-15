@@ -26,7 +26,7 @@ export const Home: React.FC = () => {
         if (shouldLink === "YOUID") {
           localStorage.removeItem("link");
           if (session.user.commitment) {
-            return router.push("/claim");
+            return router.push("/verify");
           }
           window.location.href = `${
             process.env.NEXT_PUBLIC_YOUID_URL
